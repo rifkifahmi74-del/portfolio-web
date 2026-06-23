@@ -272,6 +272,46 @@
     html.js .reveal{opacity:1!important;transform:none!important;transition:none!important;}
     .card,.btn{transition:none!important;}
   }
+
+  /* ---------- PRINT / PDF ---------- */
+  @media print{
+    @page{margin:10mm;}
+    html,body{background:#fff !important;}
+    *,*::before,*::after{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+    html.js .reveal{opacity:1 !important;transform:none !important;}
+    .nav,.nav-toggle{display:none !important;}
+
+    /* tight vertical rhythm */
+    .hero{min-height:auto !important;padding:4px 0 14px !important;}
+    .sec{padding:16px 0 !important;}
+    .impact{padding:18px 0 !important;}
+    .contact{padding:18px 0 !important;}
+    .sec-head{margin-bottom:14px !important;}
+    .card{margin-bottom:14px !important;}
+    .feature-text{padding:16px 26px 6px !important;}
+    .feature-gallery{padding:0 26px 14px !important;}
+
+    /* cap big images so pages fill without large gaps (aspect preserved, no crop on Artefac) */
+    .portrait{max-width:250px !important;margin:10px auto 0 !important;}
+    .feature-gallery{max-width:430px;margin:0 auto;}
+    .card .media{max-height:240px !important;}
+    /* keep all 5 certificates at 3-per-row in print so they fit on one page */
+    .certs{gap:14px !important;justify-content:flex-start !important;}
+    .cert{flex:1 1 30% !important;max-width:31.5% !important;}
+    /* compact contact + footer so the footer fits on the same page (no near-empty last page) */
+    .contact{padding:10px 0 4px !important;}
+    .contact h2{font-size:2rem !important;margin-bottom:10px !important;}
+    .contact p{margin-bottom:16px !important;}
+    .channels{margin-bottom:16px !important;}
+    .cred-extra{margin-top:24px !important;}
+    footer{padding:12px 0 !important;}
+
+    /* let containers flow across page breaks; keep only photos/atoms intact */
+    .media,.feature-figure,.cert,.stat,.portrait{break-inside:avoid;}
+    .card,.card.feature,.feature-inner,.xp,.edu-card,.bento,.about-grid,.timeline{break-inside:auto !important;}
+
+    a{text-decoration:none !important;}
+  }
 </style>
 </head>
 <body>
@@ -670,6 +710,8 @@
       el.textContent = fmt(parseFloat(el.dataset.target), parseInt(el.dataset.decimals,10));
     });
   } else {
+    // pre-fill final values so printing or no-scroll always shows the numbers
+    counts.forEach(function(el){ el.textContent = fmt(parseFloat(el.dataset.target), parseInt(el.dataset.decimals,10)); });
     var cio = new IntersectionObserver(function(entries){
       entries.forEach(function(en){
         if(!en.isIntersecting) return;
